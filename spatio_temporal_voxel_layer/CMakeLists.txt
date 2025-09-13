@@ -10,7 +10,12 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # Get a linker error when there are undefined symbols
-add_link_options(-Wl,--no-undefined)
+if(APPLE)
+  # macOS linker flag for AppleClang
+  add_link_options(-Wl,-undefined,error)
+else()
+  add_link_options(-Wl,--no-undefined)
+endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 
