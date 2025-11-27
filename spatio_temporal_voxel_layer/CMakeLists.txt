@@ -22,6 +22,7 @@ find_package(message_filters REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(nav2_ros_common REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(tf2_sensor_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
@@ -29,6 +30,7 @@ find_package(builtin_interfaces REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(openvdb_vendor REQUIRED)
+find_package(point_cloud_transport REQUIRED)
 
 remove_definitions(-DDISABLE_LIBUSB-1.0)
 find_package(Eigen3 REQUIRED)
@@ -68,6 +70,7 @@ set(dependencies
   visualization_msgs
   builtin_interfaces
   openvdb_vendor
+  point_cloud_transport
 )
 
 set(library_name spatio_temporal_voxel_layer_core)
@@ -119,7 +122,12 @@ target_link_libraries(${library_name}
 )
 
 # Get a linker error when there are undefined symbols
-target_link_options(${library_name} PRIVATE -Wl,--no-undefined)
+if(APPLE)
+  # macOS linker flag for AppleClang
+  target_link_options(${library_name} PRIVATE -Wl,-undefined,error)
+else()
+  target_link_options(${library_name} PRIVATE -Wl,--no-undefined)
+endif()
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
