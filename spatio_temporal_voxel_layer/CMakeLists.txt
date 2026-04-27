@@ -107,7 +107,11 @@ target_link_libraries(${library_name}
 )
 
 # Get a linker error when there are undefined symbols
-target_link_options(${library_name} PRIVATE -Wl,--no-undefined)
+if(APPLE)
+  target_link_options(${library_name} PRIVATE -Wl,--undefined,error)
+else()
+  target_link_options(${library_name} PRIVATE -Wl,--no-undefined)
+endif()
 
 ament_target_dependencies(${library_name} ${dependencies})
 
