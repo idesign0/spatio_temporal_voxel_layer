@@ -11,6 +11,7 @@ ament_vendor(${PROJECT_NAME}
   CMAKE_ARGS
     -DCONCURRENT_MALLOC=Tbbmalloc
     -DOPENVDB_BUILD_BINARIES=OFF
+    "-DCMAKE_CXX_FLAGS=-include /opt/homebrew/include/oneapi/tbb/version.h"
 )
 
 # When this package is found, make sure to find the real OpenVDB
